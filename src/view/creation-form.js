@@ -124,7 +124,7 @@ export default class FiltersView {
     return createFiltersTemplate();
   }
 
-  get element () {
+  get element() {
     if (!this.#element){
       this.#element = createElement(this.template);
     }
