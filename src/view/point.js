@@ -50,25 +50,30 @@ const createFiltersTemplate = (point, destination, offersByType) => {
 };
 
 export default class FiltersView {
+  #point        = null;
+  #destination  = null;
+  #offersByType = null;
+  #element = null;
+
   constructor(point, destination, offersByType){
-    this.point = point;
-    this.destination = destination;
-    this.offersByType = offersByType;
+    this.#point = point;
+    this.#destination = destination;
+    this.#offersByType = offersByType;
   }
 
-  getTemplate () {
-    return createFiltersTemplate(this.point, this.destination, this.offersByType);
+  get template () {
+    return createFiltersTemplate(this.#point, this.#destination, this.#offersByType);
   }
 
-  getElement () {
-    if (!this.element){
-      this.element = createElement(this.getTemplate());
+  get element () {
+    if (!this.#element){
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement () {
-    this.element = null;
+    this.#element = null;
   }
 }
