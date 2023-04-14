@@ -5,6 +5,7 @@ import EditForm from '../view/edit-form.js';
 // import CreationForm from '../view/creation-form.js';
 import TripList from '../view/trip-list.js';
 import Point from '../view/point.js';
+import EmptyListView from '../view/empty-list-view.js';
 // import PointModel from '../model/point-model.js';
 
 class Trip {
@@ -21,6 +22,11 @@ class Trip {
     const points = this.#pointModal.getPoints();
     const destination = this.#pointModal.getDestination();
     const offersByType = this.#pointModal.getOffersByType();
+
+    if (points.length === 0){
+      render(new EmptyListView(), this.#mainContainer);
+      return;
+    }
 
     render(new Sort(), this.#mainContainer, RenderPosition.BEFOREEND);
     render(this.#pointsListComponent, this.#mainContainer, RenderPosition.BEFOREEND);
