@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createFiltersTemplate = (point, destination, offersByType) => {
   const pointDestination = destination.find((dest) =>  dest.id === point.destination);
@@ -49,31 +49,21 @@ const createFiltersTemplate = (point, destination, offersByType) => {
   );
 };
 
-export default class FiltersView {
+
+export default class FiltersView extends AbstractView{
   #point        = null;
   #destination  = null;
   #offersByType = null;
-  #element = null;
+
 
   constructor(point, destination, offersByType){
+    super();
     this.#point = point;
     this.#destination = destination;
     this.#offersByType = offersByType;
   }
 
-  get template () {
+  get template() {
     return createFiltersTemplate(this.#point, this.#destination, this.#offersByType);
-  }
-
-  get element () {
-    if (!this.#element){
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement () {
-    this.#element = null;
   }
 }
