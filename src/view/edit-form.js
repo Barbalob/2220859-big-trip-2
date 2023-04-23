@@ -127,4 +127,40 @@ export default class FiltersView extends AbstractView{
   get template() {
     return createFiltersTemplate(this.#point, this.#destination, this.#offersByType);
   }
+
+  // setModeButtonClickHandler=(callback)=>{
+  //   const modeButton = this.element.querySelector('event__rollup-btn');
+  //   if (modeButton){
+  //     this.__callback.modeButtonClick = callback;
+  //     modeButton.addEventListener('click', this.#modeButtonClickHandler);
+  //   }
+  // }
+  setModeButtonClickHandler = (callback) =>{
+    this._callback.modeButtonClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click',this.#modeButtonClickHandler);
+  }
+
+  setFormSubmutHandler = (callback) =>{
+    this._callback.formSubmit = callback;
+    this.element.querySelector('.event--edit').addEventListener('submit',this.#formSubmutHandler);
+  }
+
+  setFormResetHandler = (callback) =>{
+    this._callback.formReset = callback;
+    this.element.querySelector('.event--edit').addEventListener('reset',this.#formResetHandler);
+  }
+
+  #modeButtonClickHandler = () =>{
+    this._callback.modeButtonClick();
+  }
+
+  #formSubmutHandler = (event) =>{
+    event.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  #formResetHandler = (event) =>{
+    event.preventDefault();
+    this._callback.formReset();
+  }
 }
