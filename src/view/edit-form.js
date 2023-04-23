@@ -1,5 +1,5 @@
 import { POINT_TYPES } from '../const.js';
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 
 const upLetter = ((word) => `${word[0].toUpperCase()}${word.slice(1)}`);
@@ -110,31 +110,57 @@ const createFiltersTemplate = (point, destination, offersByType) => {
   );
 };
 
-export default class FiltersView {
+
+export default class FiltersView extends AbstractView{
   #point        = null;
   #destination  = null;
   #offersByType = null;
-  #element = null
+
 
   constructor(point, destination, offersByType){
+    super();
     this.#point = point;
     this.#destination = destination;
     this.#offersByType = offersByType;
   }
 
-  get  template() {
-    return createFiltersTemplate(this.#point,  this.#destination, this.#offersByType);
+  get template() {
+    return createFiltersTemplate(this.#point, this.#destination, this.#offersByType);
   }
 
-  get element() {
-    if (!this.#element){
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
+  // setModeButtonClickHandler=(callback)=>{
+  //   const modeButton = this.element.querySelector('event__rollup-btn');
+  //   if (modeButton){
+  //     this.__callback.modeButtonClick = callback;
+  //     modeButton.addEventListener('click', this.#modeButtonClickHandler);
+  //   }
+  // }
+  setModeButtonClickHandler = (callback) =>{
+    this._callback.modeButtonClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click',this.#modeButtonClickHandler);
   }
 
-  removeElement () {
-    this.#element = null;
+  setFormSubmutHandler = (callback) =>{
+    this._callback.formSubmit = callback;
+    this.element.querySelector('.event--edit').addEventListener('submit',this.#formSubmutHandler);
+  }
+
+  setFormResetHandler = (callback) =>{
+    this._callback.formReset = callback;
+    this.element.querySelector('.event--edit').addEventListener('reset',this.#formResetHandler);
+  }
+
+  #modeButtonClickHandler = () =>{
+    this._callback.modeButtonClick();
+  }
+
+  #formSubmutHandler = (event) =>{
+    event.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  #formResetHandler = (event) =>{
+    event.preventDefault();
+    this._callback.formReset();
   }
 }

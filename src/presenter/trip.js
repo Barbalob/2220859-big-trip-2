@@ -1,4 +1,4 @@
-import { render, RenderPosition } from '../render.js';
+import { render, RenderPosition, replace} from '../framework/render';
 
 import Sort from '../view/sort.js';
 import EditForm from '../view/edit-form.js';
@@ -42,11 +42,11 @@ class Trip {
     const pointEditComponent = new EditForm(point, destination, offers);
 
     const turnPointToEdit = () => {
-      this.#pointsListComponent.element.replaceChild(pointEditComponent.element, pointComponent.element);
+      replace(pointEditComponent, pointComponent);
     };
 
     const turnPointToView = () => {
-      this.#pointsListComponent.element.replaceChild(pointComponent.element, pointEditComponent.element);
+      replace(pointComponent, pointEditComponent);
     };
 
 
@@ -57,24 +57,20 @@ class Trip {
       }
     };
 
-
-    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click',()=>{
+    pointComponent.setModeButtonClickHandler(()=>{
       turnPointToEdit();
       document.addEventListener('keyup', onEscKeyup);
     });
 
-
-    pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click',()=>{
+    pointEditComponent.setModeButtonClickHandler(()=>{
       turnPointToView();
       document.removeEventListener('keyup', onEscKeyup);
     });
-    pointEditComponent.element.querySelector('.event--edit').addEventListener('submit',(event)=>{
-      event.preventDefault();
+    pointEditComponent.setFormSubmutHandler(()=>{
       turnPointToView();
       document.removeEventListener('keyup', onEscKeyup);
     });
-    pointEditComponent.element.querySelector('.event--edit').addEventListener('reset',(event)=>{
-      event.preventDefault();
+    pointEditComponent.setFormResetHandler(()=>{
       turnPointToView();
       document.removeEventListener('keyup', onEscKeyup);
     });
