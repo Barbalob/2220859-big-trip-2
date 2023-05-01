@@ -118,7 +118,7 @@ const createFiltersTemplate = () => (
 );
 
 
-export default class FiltersView extends AbstractView{
+export default class CreatingFormView extends AbstractView{
   get template() {
     return createFiltersTemplate();
   }

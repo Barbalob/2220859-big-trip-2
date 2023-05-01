@@ -10,7 +10,7 @@ const createFiltersTemplate = () => (
   `
 );
 
-export default class FiltersView extends AbstractView{
+export default class MenuView extends AbstractView{
   get template() {
     return createFiltersTemplate();
   }
