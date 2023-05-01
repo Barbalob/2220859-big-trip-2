@@ -50,7 +50,7 @@ const createFiltersTemplate = (point, destination, offersByType) => {
 };
 
 
-export default class FiltersView extends AbstractView{
+export default class PointView extends AbstractView{
   #point        = null;
   #destination  = null;
   #offersByType = null;
