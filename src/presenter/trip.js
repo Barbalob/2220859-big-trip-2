@@ -1,50 +1,61 @@
-import { render, RenderPosition} from '../framework/render';
+import { render} from '../framework/render';
 import Sort from '../view/sort.js';
-// import EditForm from '../view/edit-form.js';
-// import CreationForm from '../view/creation-form.js';
 import TripList from '../view/trip-list.js';
-// import Point from '../view/point.js';
 import EmptyListView from '../view/empty-list-view.js';
 import PointPresenter from './point-presenter';
-import { updateItem } from '../util/common';
-// import PointModel from '../model/point-model.js';
+import { sortPointsByPrice, sortPointsByTime, updateItem } from '../util/common';
+import { SortType } from '../const';
 
 class Trip {
-  #pointsListComponent  = null;
+  #pointsListComponent  = new TripList();;
   #mainContainer  = null;
   #pointModal = null;
+  #sortComponent = new Sort()
+
   #points = [];
   #destination = [];
-  #offersByType = [];
+  #offers = [];
   #pointPresenter = new Map();
+  #currentSortType = SortType.DAY
 
   constructor({container, pointModel}){
     this.#mainContainer = container;
-    this.#pointsListComponent = new TripList();
     this.#pointModal = pointModel;
   }
 
   init() {
-    const points = this.#pointModal.getPoints();
-    const destination = this.#pointModal.getDestination();
-    const offersByType = this.#pointModal.getOffersByType();
-    this.#points = points;
-    this.#destination = destination;
-    this.#offersByType = offersByType;
+    this.#points = [...this.#pointModal.points];
+    this.#destination = this.#pointModal.destination;
+    this.#offers = this.#pointModal.offersByType;//this.#pointModal.getOffersByType();
 
-    if (points.length === 0){
-      render(new EmptyListView(), this.#mainContainer);
+    this.#renderTrip();
+  }
+
+  #sortPoints = (sortType) => {
+    switch (sortType){
+      case SortType.PRICE:
+        this.#points.sort(sortPointsByPrice);
+        break;
+      case SortType.TIME:
+        this.#points.sort(sortPointsByTime);
+        break;
+      default:
+        this.#points = [...this.#pointModal.points];
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType){
       return;
     }
 
-    render(new Sort(), this.#mainContainer, RenderPosition.BEFOREEND);
-    render(this.#pointsListComponent, this.#mainContainer, RenderPosition.BEFOREEND);
-
-
-    for (const point of points){
-      this.#renderPoint(point, destination, offersByType);
-    }
+    this.#sortPoints(sortType);
+    this.#clearTrip();
+    this.#renderTrip();
   }
+
 
   #resetAllPoints = () => {
     this.#pointPresenter.forEach((presenter) => presenter.resetPoint());
@@ -58,8 +69,30 @@ class Trip {
 
   #handlePointUpdate = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
-    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint, this.#destination, this.#offersByType);
+    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint, this.#destination, this.#offers);
   }
+
+  #clearTrip = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
+  }
+
+  #renderTrip = () => {
+    if ( this.#points.length === 0){
+      render(new EmptyListView(), this.#mainContainer);
+      return;
+    }
+
+    render(this.#sortComponent, this.#mainContainer);
+    render(this.#pointsListComponent, this.#mainContainer);
+
+    this.#sortComponent.setSortChangeHandler(this.#handleSortTypeChange);
+
+    for (const point of this.#points){
+      this.#renderPoint(point, this.#destination, this.#offers);
+    }
+  }
+
 }
 
 export default Trip;
