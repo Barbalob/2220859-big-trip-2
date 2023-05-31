@@ -46,8 +46,12 @@ class Trip {
     }
   }
 
+  #resetAllPoints = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.resetPoint());
+  }
+
   #renderPoint(point, destination, offers){
-    const pointPresenter = new PointPresenter(this.#pointsListComponent.element, this.#handlePointUpdate);
+    const pointPresenter = new PointPresenter(this.#pointsListComponent.element, this.#handlePointUpdate, this.#resetAllPoints);
     pointPresenter.init(point, destination, offers);
     this.#pointPresenter.set(point.id, pointPresenter);
   }
@@ -55,10 +59,6 @@ class Trip {
   #handlePointUpdate = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint, this.#destination, this.#offersByType);
-  }
-
-  #handleModeChange = () => {
-    this.#pointPresenter.forEach((presenter) => presenter.resetPoint());
   }
 }
 
