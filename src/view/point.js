@@ -82,6 +82,11 @@ export default class PointView extends AbstractView{
     this.element.querySelector('.event--edit').addEventListener('reset',this.#formResetHandler);
   }
 
+  setFavoriteButtonClickHandler = (callback) =>{
+    this._callback.favoriteButtonClick = callback;
+    this.element.querySelector('.event__favorite-btn').addEventListener('click',this.#favoriteButtonClickHandler);
+  }
+
   #modeButtonClickHandler = () =>{
     this._callback.modeButtonClick();
   }
@@ -94,6 +99,10 @@ export default class PointView extends AbstractView{
   #formResetHandler = (event) =>{
     event.preventDefault();
     this._callback.formReset();
+  }
+
+  #favoriteButtonClickHandler = () => {
+    this._callback.favoriteButtonClick();
   }
 
 }

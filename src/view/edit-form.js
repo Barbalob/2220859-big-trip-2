@@ -111,7 +111,7 @@ const createFiltersTemplate = (point, destination, offersByType) => {
 };
 
 
-export default class EditFormView extends AbstractView{
+export default class PointEditView extends AbstractView{
   #point        = null;
   #destination  = null;
   #offersByType = null;
