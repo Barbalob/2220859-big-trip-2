@@ -1,5 +1,5 @@
 import { POINT_TYPES } from '../const.js';
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractView from '../framework/view/abstract-stateful-view.js';
 
 
 const upFirstLetter = ((word) => `${word[0].toUpperCase()}${word.slice(1)}`);
@@ -12,7 +12,7 @@ const getOfferIdFromMarkup = (markupId) => {
 const createFiltersTemplate = (point, destination, offersByType) => {
   const pointDestination = destination.find((dest) =>  dest.id === point.destination);
   const typeOffers = offersByType.find((offer) =>  offer.type === point.type).offers;
-  const pointOffers = typeOffers.filtee((typeOffer) => point.offer.includes(typeOffer.id));
+  const pointOffers = typeOffers.filter((typeOffer) => point.offers.includes(typeOffer.id));
   // const {dateFrom, dateTo, basePrice, type} = point;
   const {basePrice, type} = point;
   const {name, description, pictures} = pointDestination || {};
@@ -35,7 +35,7 @@ const createFiltersTemplate = (point, destination, offersByType) => {
 
   ${POINT_TYPES.map((pointType) => (
       `<div class="event__type-item">
-        <input id="event-type-${pointType}-${pointId}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${pointType} ${pointType === type ? 'checked' : ''}">
+        <input id="event-type-${pointType}-${pointId}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${pointType}" ${pointType === type ? 'checked' : ''}>
         <label class="event__type-label  event__type-label--${pointType}" for="event-type-${pointType}-${pointId}">${upFirstLetter(pointType)}</label>
       </div>`
     )).join('')} 
@@ -55,7 +55,7 @@ const createFiltersTemplate = (point, destination, offersByType) => {
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-${pointId}">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text" name="event-start-time" value="${'18/03/19 12:25'}">value="${'18/03/19 12:25'}
+      <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text" name="event-start-time" value="${'18/03/19 12:25'}">
       &mdash;
       <label class="visually-hidden" for="event-end-time-${pointId}">To</label>
       <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text" name="event-end-time" value="${'18/03/19 13:35'}">
