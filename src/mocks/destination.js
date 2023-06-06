@@ -5,22 +5,22 @@ export const destination = [
     'name': 'Chamonix',
     'pictures': [
       {
-        'src': 'http://picsum.photos/300/200?r=0.072563005163317',
+        'src': 'http://loremflickr.com/300/200?random=0.0762163005163317',
         'description': 'Chamonix parliament building'
       },
       {
-        'src': 'http://picsum.photos/300/200?r=0.07623630051263317',
+        'src': 'http://loremflickr.com/300/200?random=0.0762363005163517',
         'description': 'Kremlin'
       }
     ]
   },
   {
     'id': 2,
-    'description': 'Mosckow is a big city',
+    'description': 'Moscow is a big city',
     'name': 'Moscow',
     'pictures': [
       {
-        'src': 'http://picsum.photos/300/200?r=0.0762363005163317',
+        'src': 'http://loremflickr.com/300/200?random=0.0762363005163317',
         'description': 'Kremlin'
       }
     ]
@@ -31,11 +31,11 @@ export const destination = [
     'name': 'London',
     'pictures': [
       {
-        'src': 'http://picsum.photos/300/200?r=0.0762543005163317',
+        'src': 'http://loremflickr.com/300/200?random=0.0762163005163317',
         'description': 'Tower building'
       },
       {
-        'src': 'http://picsum.photos/300/200?r=0.0762543005163117',
+        'src': 'http://loremflickr.com/300/200?random=0.0762480005163317',
         'description': 'Tower building 1'
       }
     ]
