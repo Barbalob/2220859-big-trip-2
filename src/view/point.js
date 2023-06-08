@@ -1,10 +1,11 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import { dateDifference, humanizeTaskDueDate } from '../util/common.js';
 
 const createFiltersTemplate = (point, destination, offersByType) => {
   const pointDestination = destination.find((dest) =>  dest.id === point.destination);
   const pointTypeOffers = offersByType.find((offer) =>  offer.type === point.type).offers;
   const pointOffers = pointTypeOffers.filter((offer) =>  point.offers.includes(offer.id));
-
+  const {dateTo, dateFrom} = point;
   return (
     `<li class="trip-events__item">
   <div class="event">
@@ -15,11 +16,11 @@ const createFiltersTemplate = (point, destination, offersByType) => {
     <h3 class="event__title">${point.type} ${pointDestination.name}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="${'2019-03-18T10:30'}">${'10:30'}</time>
+        <time class="event__start-time" datetime="${humanizeTaskDueDate(dateFrom,'DD/MM/YY HH:mm')}">${humanizeTaskDueDate(dateFrom,'HH:mm')}</time>
         &mdash;
-        <time class="event__end-time" datetime="${'2019-03-18T11:00'}">${'11:00'}</time>
+        <time class="event__end-time" datetime="${humanizeTaskDueDate(dateTo,'DD/MM/YY HH:mm')}">${humanizeTaskDueDate(dateTo,'HH:mm')}</time>
       </p>
-      <p class="event__duration">30M</p>
+      <p class="event__duration">${dateDifference(dateTo, dateFrom)}</p>
     </div>
     <p class="event__price">
       &euro;&nbsp;<span class="event__price-value">${point.basePrice}</span>

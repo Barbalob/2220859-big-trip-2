@@ -1,6 +1,11 @@
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 import { POINT_TYPES } from '../const.js';
 import AbstractView from '../framework/view/abstract-stateful-view.js';
+import { humanizeTaskDueDate } from '../util/common.js';
 
+
+const DATEPICKER_FORMAT = 'd/m/y H:i';
 
 const upFirstLetter = ((word) => `${word[0].toUpperCase()}${word.slice(1)}`);
 // cons t formatOfferstitle = (title) => title.split(' ').join('_');
@@ -9,12 +14,12 @@ const getOfferIdFromMarkup = (markupId) => {
   return Number(markupAssets[2]) || 0;
 };
 
+
 const createFiltersTemplate = (point, destination, offersByType) => {
   const pointDestination = destination.find((dest) =>  dest.id === point.destination);
   const typeOffers = offersByType.find((offer) =>  offer.type === point.type).offers;
   const pointOffers = typeOffers.filter((typeOffer) => point.offers.includes(typeOffer.id));
-  // const {dateFrom, dateTo, basePrice, type} = point;
-  const {basePrice, type} = point;
+  const {dateFrom, dateTo, basePrice, type} = point;
   const {name, description, pictures} = pointDestination || {};
   const pointId = point.id || 0;
 
@@ -55,10 +60,10 @@ const createFiltersTemplate = (point, destination, offersByType) => {
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-${pointId}">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text" name="event-start-time" value="${'18/03/19 12:25'}">
+      <input class="event__input  event__input--time" id="event-start-time-${pointId}" type="text" name="event-start-time" value="${humanizeTaskDueDate(dateTo,'DD/MM/YY HH:mm')}">
       &mdash;
       <label class="visually-hidden" for="event-end-time-${pointId}">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text" name="event-end-time" value="${'18/03/19 13:35'}">
+      <input class="event__input  event__input--time" id="event-end-time-${pointId}" type="text" name="event-end-time" value="${humanizeTaskDueDate(dateFrom,'DD/MM/YY HH:mm')}">
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -106,12 +111,11 @@ const createFiltersTemplate = (point, destination, offersByType) => {
       `<section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${description}</p>
-    ${pictures.lenght ? (
+    ${pictures.length ? (
         `
       <div class="event__photos-container">
         <div class="event__photos-tape">
-        ${pictures.map((photo)=> `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`)}
-        // ${pictures.map((photo)=> (`<img class="event__photo" src="${photo.src}" alt="${photo.description}"></img>`)).join('')}
+        ${pictures.map((photo)=> `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`)}  
         </div>
       </div>
       `
@@ -129,6 +133,8 @@ export default class PointEditView extends AbstractView{
   #point        = null;
   #destination  = [];
   #offersByType = [];
+  #datepickerStart= null;
+  #datepickerEnd = null;
 
 
   constructor(point, destination, offersByType){
@@ -138,6 +144,8 @@ export default class PointEditView extends AbstractView{
     this.#offersByType = offersByType;
     this._setState(this.#point);
     this.#setInnerHandlers();
+    this.#setDatepickerStart();
+    this.#setDatepickerEnd();
   }
 
   get template() {
@@ -226,6 +234,44 @@ export default class PointEditView extends AbstractView{
     });
   }
 
+  #changeDateFromHandler = ([dateFrom]) => {
+    this._setState({
+      dateFrom,
+    });
+  }
+
+  #changeDateToHandler = ([dateTo]) => {
+    this._setState({
+      dateTo,
+    });
+  }
+
+  #setDatepickerStart = () =>{
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('.event__input--time[name=event-start-time]'),
+      {
+        enableTime:true,
+        dateFormat: DATEPICKER_FORMAT,
+        defaultDate: this._state.dateFrom,
+        maxDate:this._state.dateTo,
+        onChange: this.#changeDateFromHandler,
+      }
+    );
+  }
+
+  #setDatepickerEnd = () =>{
+    this.#datepickerEnd = flatpickr(
+      this.element.querySelector('.event__input--time[name=event-end-time]'),
+      {
+        enableTime:true,
+        dateFormat: DATEPICKER_FORMAT,
+        defaultDate: this._state.dateTo,
+        minDate:this._state.dateFrom,
+        onChange: this.#changeDateToHandler,
+      }
+    );
+  }
+
 
   #setInnerHandlers = () => {
     const offersNode = this.element.querySelector('.event__available-offers');
@@ -240,8 +286,23 @@ export default class PointEditView extends AbstractView{
 
   _restoreHandlers(){
     this.#setInnerHandlers();
+    this.#setDatepickerStart();
+    this.#setDatepickerEnd();
     this.setFormSubmutHandler(this._callback.formSubmit);
     this.setFormResetHandler(this._callback.formReset);
     this.setModeButtonClickHandler(this._callback.modeButtonClick);
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerStart){
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+    if (this.#datepickerEnd){
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
   }
 }

@@ -69,6 +69,7 @@ export default class PointPresenter{
   }
 
   #turnPointToView(){
+    this.#pointEditComponent.resetState();
     replace(this.#pointComponent, this.#pointEditComponent);
     this.#mode = Mode.VIEW;
     document.removeEventListener('keyup', this.#onEscKeyup);
