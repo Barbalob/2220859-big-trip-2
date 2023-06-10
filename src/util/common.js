@@ -37,3 +37,10 @@ export const dateDifference = (a, b) => {
   return difference;
 };
 
+export const checkIfPatchUpdate = (a, b) => {
+  const isPriceEqual = a.basePrice === b.basePrice;
+  const isDurationEqual = getPointDuration(a) === getPointDuration(b);
+
+  return isPriceEqual && isDurationEqual;
+};
+
