@@ -24,7 +24,7 @@ export default class NewPointButton{
     }
 
     #clickHandler = (evt) => {
-      evt.preventDefaut();
+      evt.preventDefault();
       this._callback.clickHandler();
     }
 }

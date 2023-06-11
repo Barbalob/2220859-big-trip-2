@@ -3,8 +3,7 @@ import Sort from '../view/sort.js';
 import TripList from '../view/trip-list.js';
 import EmptyListView from '../view/empty-list-view.js';
 import PointPresenter from './point-presenter';
-// import { sortPointsByPrice, sortPointsByTime, updateItem } from '../util/common';
-import { updateItem } from '../util/common';
+import { sortPointsByPrice, sortPointsByTime, updateItem, filterPoints } from '../util/common';
 import { FilterType, SortType, UpdateType, UserAction } from '../const';
 import { getDefaultPoint } from '../util/default-point';
 import NewPointPresenter from './new-point-presenter';
@@ -36,19 +35,18 @@ class Trip {
   }
 
   get points() {
-    // const filterType = this.#filterModel.filter;
-    // const points = this.#pointModel.points;
-    // const filteredPoints = filterPoints[filterType](points);
+    const filterType = this.#filterModel.filter;
+    const points = this.#pointModel.points;
+    const filteredPoints = filterPoints[filterType](points);
 
-    // switch (this.#currentSortType){
-    //   case SortType.PRICE:
-    //     return filteredPoints.sort(sortPointsByPrice);
-    //   case SortType.TIME:
-    //     return filteredPoints.sort(sortPointsByTime);
-    // }
+    switch (this.#currentSortType){
+      case SortType.PRICE:
+        return filteredPoints.sort(sortPointsByPrice);
+      case SortType.TIME:
+        return filteredPoints.sort(sortPointsByTime);
+    }
 
-    // return filteredPoints;
-    return this.#pointModel.points;
+    return filteredPoints;
   }
 
   get destination(){
@@ -60,31 +58,16 @@ class Trip {
   }
 
   get isTripEmpty(){
-    return this.#pointModel.point.length === 0;
+    return this.#pointModel.points.length === 0;
   }
 
   init() {
     this.#renderTrip();
   }
 
-  // #sortPoints = (sortType) => {
-  //   switch (sortType){
-  //     case SortType.PRICE:
-  //       this.#points.sort(sortPointsByPrice);
-  //       break;
-  //     case SortType.TIME:
-  //       this.#points.sort(sortPointsByTime);
-  //       break;
-  //     default:
-  //       this.#points = [...this.#pointModel.points];
-  //   }
-
-  //   this.#currentSortType = sortType;
-  // }
-
   createPoint(){
     this.#currentSortType = SortType.DEFAULT;
-    this.#filterModel.setFilter(UpdateType.MAJOR,FilterType.EVERYTHING);
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init(getDefaultPoint(), this.destination, this.offers);
   }
 

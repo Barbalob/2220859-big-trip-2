@@ -18,8 +18,8 @@ export default class NewPointPresenter {
   init(point, destination, offers){
     this.#pointNewComponent = new PointEditView(point, destination, offers);
 
-    this.#pointNewComponent.setformSubmitHandler(this.#handleFormSubmit);
-    this.#pointNewComponent.setformResetHandler(this.#handleFormReset);
+    this.#pointNewComponent.setFormSubmutHandler(this.#handleFormSubmit);
+    this.#pointNewComponent.setFormResetHandler(this.#handleFormReset);
 
     render(this.#pointNewComponent, this.#pointListComponent, RenderPosition.AFTERBEGIN);
 
@@ -32,6 +32,7 @@ export default class NewPointPresenter {
     }
 
     this.#handleDestroy();
+
     remove(this.#pointNewComponent);
     this.#pointNewComponent = null;
 

@@ -2,11 +2,11 @@
 import ListHeadersView from './view/headers.js';
 import ListMenuView from './view/menu.js';
 import Trip from './presenter/trip.js';
-import { render, RenderPosition } from './render.js';
 import PointModel from './model/point-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import FilterModel from './model/filter-model.js';
 import NewPointButton from './view/new-point-button.js';
+import { RenderPosition, render } from './framework/render.js';
 
 const filterContainer = document.querySelector('.trip-controls__filters');
 const tripMainContainer = document.querySelector('.trip-main');
@@ -22,15 +22,14 @@ const model = new PointModel();
 model.init();
 
 const filterModel = new FilterModel();
-
-
 const newPointButtonComponent = new NewPointButton();
 
-const tripPresenter = new Trip({container : tripContainer, pointModel: model, filterModel: filterModel, onNewPointDestroy: handleNewPointFormClose()});
+const tripPresenter = new Trip({container : tripContainer, pointModel: model, filterModel: filterModel, onNewPointDestroy: handleNewPointFormClose});
 tripPresenter.init();
 
 const filterPresenter = new FilterPresenter({container:filterContainer, pointModel: model, filterModel: filterModel});
 filterPresenter.init();
+
 
 newPointButtonComponent.setClickHandler(handleNewPointButtonClick);
 
