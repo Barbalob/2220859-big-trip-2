@@ -78,7 +78,7 @@ class Trip {
         this.#pointModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
-        this.#pointModel.addPoint(UpdateType, update);
+        this.#pointModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
         this.#pointModel.deletePoint(updateType, update);
@@ -118,9 +118,11 @@ class Trip {
   }
 
   #renderPoint(point, destination, offers){
-    const pointPresenter = new PointPresenter(this.#pointsListComponent.element, this.#handleViewAction, this.#resetAllPoints);
-    pointPresenter.init(point, destination, offers);
-    this.#pointPresenter.set(point.id, pointPresenter);
+    if (point.basePrice !== '' && point.destination !== 0){
+      const pointPresenter = new PointPresenter(this.#pointsListComponent.element, this.#handleViewAction, this.#resetAllPoints);
+      pointPresenter.init(point, destination, offers);
+      this.#pointPresenter.set(point.id, pointPresenter);
+    }
   }
 
   #handlePointUpdate = (updatedPoint) => {

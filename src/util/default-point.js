@@ -1,7 +1,8 @@
 import { POINT_TYPES } from '../const';
+import { nanoid } from 'nanoid';
 
 export const getDefaultPoint = () => ({
-  id: 0,
+  id: nanoid(),
   basePrice: '',
   dateFrom: new Date().toISOString(),
   dateTo: new Date().toISOString(),
