@@ -65,6 +65,41 @@ export default class PointPresenter{
     remove(this.#pointEditComponent);
   }
 
+  setAborting(){
+    if (this.#mode === Mode.VIEW) {
+      this.#pointEditComponent.shake();
+    }
+    else if (this.#mode === Mode.EDIT) {
+      const resetPointState = () => {
+        this.#pointEditComponent.updateElement({
+          isSaving:false,
+          isDeleting:false,
+          isDisabled:false,
+        });
+      };
+
+      this.#pointEditComponent.shake(resetPointState);
+    }
+  }
+
+  setSaving(){
+    if (this.#mode === Mode.EDIT) {
+      this.#pointEditComponent.updateElement({
+        isSaving:true,
+        isDisabled:true,
+      });
+    }
+  }
+
+  setDeleting(){
+    if (this.#mode === Mode.EDIT) {
+      this.#pointEditComponent.updateElement({
+        isDeleting:true,
+        isDisabled:true,
+      });
+    }
+  }
+
   #onEscKeyup = (evt) => {
     if (evt.key === 'Escape'){
       this.#turnPointToView();

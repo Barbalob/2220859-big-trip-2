@@ -7,6 +7,7 @@ import { sortPointsByPrice, sortPointsByTime, updateItem, filterPoints } from '.
 import { FilterType, SortType, UpdateType, UserAction } from '../const';
 import { getDefaultPoint } from '../util/default-point';
 import NewPointPresenter from './new-point-presenter';
+import LoadingView from '../view/loading-view';
 
 class Trip {
   #pointsListComponent  = new TripList();;
@@ -16,6 +17,8 @@ class Trip {
   #sortComponent = new Sort();
   #emptyListComponent = null;
   #newPointPresenter = null
+  #loadingComponent = new LoadingView();
+  #isLoading = true;
 
   // #points = [];
   // #destination = [];
@@ -62,6 +65,9 @@ class Trip {
   }
 
   init() {
+    if (this.#isLoading){
+      render(this.#loadingComponent,this.#mainContainer);
+    }
     this.#renderTrip();
   }
 
@@ -72,10 +78,15 @@ class Trip {
   }
 
 
-  #handleViewAction = (actionType, updateType, update) =>{
+  #handleViewAction = async (actionType, updateType, update) =>{
     switch (actionType){
       case UserAction.UPDATE_POINT:
-        this.#pointModel.updatePoint(updateType, update);
+        this.#pointPresenter.get(update.id).setSaving();
+        try{
+          await this.#pointModel.updatePoint(updateType, update);
+        } catch {
+          this.#pointPresenter.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
         this.#pointModel.addPoint(updateType, update);
@@ -97,6 +108,11 @@ class Trip {
         break;
       case UpdateType.MAJOR:
         this.#clearTrip({resetDorttype:true});
+        this.#renderTrip();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
         this.#renderTrip();
         break;
     }
