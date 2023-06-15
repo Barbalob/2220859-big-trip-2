@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { FilterType } from '../const';
 
 export function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
@@ -35,5 +36,26 @@ export const dateDifference = (a, b) => {
     difference = difference + minute % 60 + M;
   }
   return difference;
+};
+
+export const DayMonth = (a) => {
+  a = new Date(a);
+  a = a.toDateString();
+  const b = a.split(' ');
+  const space = ' ';
+  return  b[1] + space + b[2];
+};
+
+export const checkIfPatchUpdate = (a, b) => {
+  const isPriceEqual = a.basePrice === b.basePrice;
+  const isDurationEqual = getPointDuration(a) === getPointDuration(b);
+
+  return isPriceEqual && isDurationEqual;
+};
+
+export const filterPoints = {
+  [FilterType.EVERYTHING] : (points) => [...points],
+  [FilterType.FUTURE] : (points) => points.filter((point) => new Date(point.dateForm).getTime() >= Date.now()),
+  [FilterType.PAST] : (points) => points.filter((point) => new Date(point.dateTo).getTime() < Date.now()),
 };
 

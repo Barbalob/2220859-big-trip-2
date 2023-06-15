@@ -157,8 +157,11 @@ export default class PointEditView extends AbstractView{
   }
 
   setModeButtonClickHandler = (callback) =>{
-    this._callback.modeButtonClick = callback;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click',this.#modeButtonClickHandler);
+    const modeButton = this.element.querySelector('.event__rollup-btn');
+    if (modeButton){
+      this._callback.modeButtonClick = callback;
+      this.element.querySelector('.event__rollup-btn').addEventListener('click',this.#modeButtonClickHandler);
+    }
   }
 
   setFormSubmutHandler = (callback) =>{

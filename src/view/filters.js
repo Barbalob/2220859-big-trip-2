@@ -1,3 +1,4 @@
+import { FilterType } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
 const createFiltersTemplate = (pastPoints, futurePoints) => (
@@ -21,7 +22,7 @@ const createFiltersTemplate = (pastPoints, futurePoints) => (
 
 export default class FiltersView extends AbstractView{
   #pastPoints = [];
-  #futurepoints = [];
+  #futurepoints = FilterType.EVERYTHING;
 
   constructor(pastPoints,futurePoints){
     super();
@@ -31,5 +32,14 @@ export default class FiltersView extends AbstractView{
 
   get template() {
     return createFiltersTemplate(this.#pastPoints, this.#futurepoints);
+  }
+
+  setFilterChangeHandler = (callback) => {
+    this._callback.changeFilter = callback;
+    this.element.addEventListener('change', this.#filterChangeHandler);
+  }
+
+  #filterChangeHandler = (evt) => {
+    this._callback.changeFilter(evt.target.value);
   }
 }

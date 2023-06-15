@@ -1,4 +1,6 @@
+import { UpdateType, UserAction } from '../const';
 import { remove, render,  replace} from '../framework/render';
+import { checkIfPatchUpdate } from '../util/common';
 import PointEditView from '../view/edit-form';
 import PointView from '../view/point';
 
@@ -10,15 +12,16 @@ const Mode = {
 export default class PointPresenter{
   #pointListContainer = null;
   #handlePointUpdate = null
+  #changeData = null
   #pointComponent = null
   #pointEditComponent = null
   #resetAllPoints = null;
   #point = null;
   #mode = Mode.VIEW;
 
-  constructor(pointListContainer, onPointUpdate, resetAllPoints){
+  constructor(pointListContainer, changeData, resetAllPoints){
     this.#pointListContainer = pointListContainer;
-    this.#handlePointUpdate = onPointUpdate;
+    this.#changeData = changeData;
     this.#resetAllPoints = resetAllPoints;
   }
 
@@ -83,16 +86,29 @@ export default class PointPresenter{
   }
 
   #handleFavoriteClick = () => {
-    this.#handlePointUpdate({...this.#point, isFavorite : !this.#point.isFavorite});
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      {...this.#point, isFavorite: !this.#point.isFavorite}
+    );
   }
 
-  #handleFormSubmitClick = (point) => {
-    this.#handlePointUpdate(point);
+  #handleFormSubmitClick = (update) => {
+    const isPatchUpdate = checkIfPatchUpdate(this.#point, update);
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      isPatchUpdate ? UpdateType.PATCH : UpdateType.MINOR,
+      update
+    );
     this.#turnPointToView();
   };
 
   #handleFormResetClick = () => {
-    this.#turnPointToView();
+    this.#changeData(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      this.#point
+    );
   };
 
   #handlePointResetClick = () => {

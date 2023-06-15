@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { dateDifference, humanizeTaskDueDate } from '../util/common.js';
+import { DayMonth, dateDifference, humanizeTaskDueDate } from '../util/common.js';
 
 const createFiltersTemplate = (point, destination, offersByType) => {
   const pointDestination = destination.find((dest) =>  dest.id === point.destination);
@@ -9,7 +9,7 @@ const createFiltersTemplate = (point, destination, offersByType) => {
   return (
     `<li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="${'2019-03-18'}">${'MAR 18'}</time>
+    <time class="event__date" datetime="${humanizeTaskDueDate(dateFrom,'DD/MM/YY HH:mm')}">${DayMonth(dateFrom)}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${point.type}.png" alt="Event type icon">
     </div>
