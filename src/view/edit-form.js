@@ -8,7 +8,7 @@ import { humanizeTaskDueDate } from '../util/common.js';
 const DATEPICKER_FORMAT = 'd/m/y H:i';
 
 const upFirstLetter = ((word) => `${word[0].toUpperCase()}${word.slice(1)}`);
-// cons t formatOfferstitle = (title) => title.split(' ').join('_');
+
 const getOfferIdFromMarkup = (markupId) => {
   const markupAssets = markupId.split('-');
   return Number(markupAssets[2]) || 0;
@@ -142,7 +142,7 @@ export default class PointEditView extends AbstractView{
     this.#point = point;
     this.#destination = destination;
     this.#offersByType = offersByType;
-    this._setState(this.#point);
+    this._setState(PointEditView.parsePointToState(this.#point));
     this.#setInnerHandlers();
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
@@ -153,7 +153,7 @@ export default class PointEditView extends AbstractView{
   }
 
   resetState = () => {
-    this.updateElement(this.#point);
+    this.updateElement(PointEditView.parsePointToState(this.#point));
   }
 
   setModeButtonClickHandler = (callback) =>{
@@ -180,7 +180,7 @@ export default class PointEditView extends AbstractView{
 
   #formSubmutHandler = (event) =>{
     event.preventDefault();
-    this._callback.formSubmit(this._state);
+    this._callback.formSubmit(PointEditView.parseStateToPoint(this._state));
   }
 
   #formResetHandler = (event) =>{
@@ -307,5 +307,20 @@ export default class PointEditView extends AbstractView{
       this.#datepickerEnd.destroy();
       this.#datepickerEnd = null;
     }
+  }
+
+  static parsePointToState(point) {
+    return {
+      ...point,
+      isSaving:false,
+      isDeleting:false,
+    };
+  }
+
+  static parseStateToPoint(state) {
+    const point = {...state};
+    delete point.isSaving;
+    delete point.isDeleting;
+    return point;
   }
 }

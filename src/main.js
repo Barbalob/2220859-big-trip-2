@@ -7,6 +7,10 @@ import FilterPresenter from './presenter/filter-presenter.js';
 import FilterModel from './model/filter-model.js';
 import NewPointButton from './view/new-point-button.js';
 import { RenderPosition, render } from './framework/render.js';
+import PoitApiService from './point-api-service.js';
+
+const AUTHORIZATION = 'Basic basi_k2qqdvs3vzvw22t_basic';
+const END_POINT = 'https://18.ecmascript.pages.academy/big-trip';
 
 const filterContainer = document.querySelector('.trip-controls__filters');
 const tripMainContainer = document.querySelector('.trip-main');
@@ -18,7 +22,7 @@ const menuContainer = document.querySelector('.trip-controls__navigation');
 render(new ListHeadersView(), tripMainContainer, RenderPosition.AFTERBEGIN);
 render(new ListMenuView(), menuContainer);
 
-const model = new PointModel();
+const model = new PointModel({pointsApiService: new PoitApiService(END_POINT, AUTHORIZATION)});
 model.init();
 
 const filterModel = new FilterModel();
