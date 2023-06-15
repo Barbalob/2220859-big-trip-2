@@ -35,9 +35,9 @@ export default class AbstractStatefulView extends AbstractView {
    */
 
 
-  _setState(update) {
-    this._state = structuredClone({...this._state, ...update});
-  }
+  // _setState(update) {
+  //   this._state = structuredClone({...this._state, ...update});
+  // }
 
   /** Метод для перерисовки элемента */
   #rerenderElement() {
