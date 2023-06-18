@@ -35,6 +35,9 @@ export default class FilterPresenter{
       case UpdateType.MINOR:
       case UpdateType.MAJOR:
         this.init();
+        break;
+      case UpdateType.INIT:
+        this.init();
     }
   }
 
