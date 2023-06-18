@@ -158,10 +158,13 @@ class Trip {
   }
 
   #renderTrip = () => {
-    if (this.points.length === 0){
+    if (this.points.length === 0 && !this.#isLoading){
       remove(this.#sortComponent);
       this.#emptyListComponent = new EmptyListView(this.#filterModel.filter, this.isTripEmpty);
       render(this.#emptyListComponent, this.#mainContainer);
+      return;
+    }
+    else if (this.#isLoading){
       return;
     }
 
