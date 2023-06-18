@@ -12,11 +12,11 @@ export default class NewPointButton{
     }
 
     disable = () => {
-      this.element.disable = true;
+      this.element.disabled  = true;
     }
 
     enable = () => {
-      this.element.disable = false;
+      this.element.disabled  = false;
     }
 
     setClickHandler = (callback) => {
