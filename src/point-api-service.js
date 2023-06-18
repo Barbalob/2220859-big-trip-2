@@ -24,12 +24,12 @@ export default class PoitApiService extends ApiService{
       then(ApiService.parseResponse);
   }
 
-  async updatedPoint(point) {
+  async updatePoint(point) {
     const response = await this._load({
       url: `points/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(this.#adaptToServer(point)),
-      header: new Headers({'Content-Type': 'application/json'}),
+      headers: new Headers({'Content-Type': 'application/json'}),
     });
 
     const parsedResponse = await ApiService.parseResponse(response);
@@ -42,7 +42,7 @@ export default class PoitApiService extends ApiService{
       url: 'points',
       method: Method.POST,
       body: JSON.stringify(this.#adaptToServer(point)),
-      header: new Headers({'Content-Type': 'application/json'}),
+      headers: new Headers({'Content-Type': 'application/json'}),
     });
 
     const parsedResponse = await ApiService.parseResponse(response);

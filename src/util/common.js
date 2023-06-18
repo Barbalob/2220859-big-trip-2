@@ -6,13 +6,21 @@ export function updateItem(items, update) {
 }
 
 const getPointDuration = (point) => {
-  const {dateForm: startDate, dateTo: endDate} = point;
+  const {dateFrom: startDate, dateTo: endDate} = point;
   const duration = (new Date(endDate)).getTime() - (new Date(startDate)).getTime();
+  return duration;
+};
+
+const getDay = (point) => {
+  const {dateFrom: startDate} = point;
+  const duration = (new Date(startDate)).getTime();
   return duration;
 };
 
 export const sortPointsByPrice = (a, b) => b.basePrice - a.basePrice;
 export const sortPointsByTime = (a, b) => getPointDuration(b) - getPointDuration(a);
+export const sortPointsByDay = (a, b) => getDay(a) - getDay(b);
+
 export const humanizeTaskDueDate = (dueDate, form) => dueDate ? dayjs(dueDate).format(form) : '';
 
 export const dateDifference = (a, b) => {
@@ -43,7 +51,7 @@ export const DayMonth = (a) => {
   a = a.toDateString();
   const b = a.split(' ');
   const space = ' ';
-  return  b[1] + space + b[2];
+  return b[1] + space + b[2];
 };
 
 export const checkIfPatchUpdate = (a, b) => {
@@ -55,7 +63,7 @@ export const checkIfPatchUpdate = (a, b) => {
 
 export const filterPoints = {
   [FilterType.EVERYTHING] : (points) => [...points],
-  [FilterType.FUTURE] : (points) => points.filter((point) => new Date(point.dateForm).getTime() >= Date.now()),
+  [FilterType.FUTURE] : (points) => points.filter((point) => new Date(point.dateFrom).getTime() >= Date.now()),
   [FilterType.PAST] : (points) => points.filter((point) => new Date(point.dateTo).getTime() < Date.now()),
 };
 

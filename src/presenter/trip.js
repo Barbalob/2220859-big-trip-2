@@ -3,7 +3,7 @@ import Sort from '../view/sort.js';
 import TripList from '../view/trip-list.js';
 import EmptyListView from '../view/empty-list-view.js';
 import PointPresenter from './point-presenter';
-import { sortPointsByPrice, sortPointsByTime, updateItem, filterPoints } from '../util/common';
+import { sortPointsByPrice, sortPointsByTime, updateItem, filterPoints, sortPointsByDay } from '../util/common';
 import { FilterType, SortType, UpdateType, UserAction } from '../const';
 import { getDefaultPoint } from '../util/default-point';
 import NewPointPresenter from './new-point-presenter';
@@ -47,6 +47,8 @@ class Trip {
         return filteredPoints.sort(sortPointsByPrice);
       case SortType.TIME:
         return filteredPoints.sort(sortPointsByTime);
+      case SortType.DAY:
+        return filteredPoints.sort(sortPointsByDay);
     }
 
     return filteredPoints;
@@ -156,10 +158,13 @@ class Trip {
   }
 
   #renderTrip = () => {
-    if (this.points.length === 0){
+    if (this.points.length === 0 && !this.#isLoading){
       remove(this.#sortComponent);
       this.#emptyListComponent = new EmptyListView(this.#filterModel.filter, this.isTripEmpty);
       render(this.#emptyListComponent, this.#mainContainer);
+      return;
+    }
+    else if (this.#isLoading){
       return;
     }
 
