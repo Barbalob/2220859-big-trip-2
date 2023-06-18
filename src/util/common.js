@@ -43,7 +43,7 @@ export const DayMonth = (a) => {
   a = a.toDateString();
   const b = a.split(' ');
   const space = ' ';
-  return  b[1] + space + b[2];
+  return b[1] + space + b[2];
 };
 
 export const checkIfPatchUpdate = (a, b) => {

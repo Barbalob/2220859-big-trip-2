@@ -20,7 +20,7 @@ export const UpdateType = {
   INIT: 'INIT',
 };
 
-export const FilterType ={
+export const FilterType = {
   EVERYTHING : 'everything',
   PAST: 'past',
   FUTURE: 'future',
