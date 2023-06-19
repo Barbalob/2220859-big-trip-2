@@ -2,7 +2,6 @@ import { FilterType } from '../const.js';
 import AbstractView from '../framework/view/abstract-view.js';
 import { filterPoints } from '../util/common.js';
 
-
 const createFiltersTemplate = (points, currentFilterType) => (
   `<form class="trip-filters" action="#" method="get">
   <div class="trip-filters__filter">
