@@ -168,6 +168,7 @@ class Trip {
       return;
     }
 
+
     remove(this.#emptyListComponent);
     render(this.#sortComponent, this.#mainContainer);
     render(this.#pointsListComponent, this.#mainContainer);
